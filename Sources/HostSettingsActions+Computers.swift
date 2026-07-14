@@ -61,6 +61,10 @@ extension HostSettingsActions {
         await directory.unpair(deviceID: deviceID)
     }
 
+    func openComputerViewer(deviceID: String) {
+        HiveViewerWindowController.shared.show(deviceID: deviceID)
+    }
+
     // MARK: - Mapping (pure)
 
     /// Map the merged directory rows into the settings package's snapshot.
