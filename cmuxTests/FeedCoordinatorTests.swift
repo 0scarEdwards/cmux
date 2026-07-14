@@ -10,6 +10,19 @@ import CMUXAgentLaunch
 
 @Suite("Feed coordinator", .serialized)
 struct FeedCoordinatorTests {
+    @Test func feedSurfaceTrustIsLimitedToTheBundledEntryPoint() throws {
+        let resources = FileManager.default.temporaryDirectory
+            .appendingPathComponent("cmux-feed-resources-\(UUID().uuidString)", isDirectory: true)
+        let feedURL = resources
+            .appendingPathComponent("markdown-viewer/webviews-app", isDirectory: true)
+            .appendingPathComponent("feed.html")
+
+        #expect(FeedSurfaceBridge.isTrustedFeedURL(feedURL, resourceURL: resources))
+        #expect(FeedSurfaceBridge.isTrustedFeedURL(URL(string: feedURL.absoluteString + "#feed"), resourceURL: resources))
+        #expect(!FeedSurfaceBridge.isTrustedFeedURL(feedURL.deletingLastPathComponent().appendingPathComponent("index.html"), resourceURL: resources))
+        #expect(!FeedSurfaceBridge.isTrustedFeedURL(URL(string: "https://example.com/feed.html"), resourceURL: resources))
+    }
+
     @Test func codexTeamsResolvesExplicitWorkingDirectoryFlags() {
         let base = "/tmp/cmux-base"
 
