@@ -388,6 +388,15 @@ struct TitlebarCloudVMButton: View {
     @MainActor
     static func appendCloudVMMenuItems(to menu: NSMenu) {
         menu.addItem(mouseDownMenuItem(
+            title: String(
+                localized: "command.cloudVM.teamWindow.open.title",
+                defaultValue: "Open Team Window"
+            ),
+            action: {
+                CloudVMMenuTarget.shared.openTeamWindow()
+            }
+        ))
+        menu.addItem(mouseDownMenuItem(
             title: String(localized: "command.cloudVM.open.title", defaultValue: "Open Base"),
             action: {
                 CloudVMMenuTarget.shared.open()
@@ -461,6 +470,13 @@ private final class CloudVMMenuTarget: NSObject {
 
     @objc func open() {
         _ = AppDelegate.shared?.performCloudVMAction(debugSource: "titlebar.cloudVM.menu.open")
+    }
+
+    @objc func openTeamWindow() {
+        _ = AppDelegate.shared?.performSharedTeamWindowAction(
+            preferredWindow: NSApp.keyWindow,
+            debugSource: "titlebar.cloudVM.menu.teamWindow"
+        )
     }
 
     @objc func fork() {
